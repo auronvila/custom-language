@@ -4,11 +4,12 @@ export enum TokenType {
   Equals,
   OpenParen,
   CloseParen,
+  SemiColon,
   BinaryOperator,
   Let,
 }
 
-const KEYWORDS: Record<string, TokenType> = {
+const RESERVED_KEYWORDS: Record<string, TokenType> = {
   'let': TokenType.Let
 }
 
@@ -50,6 +51,8 @@ export function tokenize(sourceCode: string): Token[] {
       tokens.push(token(src.shift(), TokenType.BinaryOperator));
     } else if (src[0] === '=') {
       tokens.push(token(src.shift(), TokenType.Equals));
+    } else if (src[0] === ';') {
+      tokens.push(token(src.shift(), TokenType.SemiColon))
     } else {
       // handle multi character tokens e.x >=, <=
 
@@ -68,7 +71,7 @@ export function tokenize(sourceCode: string): Token[] {
         }
 
         // check for reserved keywords
-        const reserved = KEYWORDS[ident]
+        const reserved = RESERVED_KEYWORDS[ident]
         if (reserved === undefined) {
           tokens.push(token(ident, TokenType.Identifier));
         } else {
