@@ -43,15 +43,16 @@ export function tokenize(sourceCode: string): Token[] {
 
   // build each token
   while (src.length > 0) {
-    if (src[0] === '(') {
+    // handle single character token
+    if (src[0] == '(') {
       tokens.push(token(src.shift(), TokenType.OpenParen));
-    } else if (src[0] === ')') {
+    } else if (src[0] == ')') {
       tokens.push(token(src.shift(), TokenType.CloseParen));
-    } else if (src[0] === '+' || src[0] === '-' || src[0] === '*' || src[0] === '/') {
+    } else if (src[0] == '+' || src[0] == '-' || src[0] == '*' || src[0] == '/') {
       tokens.push(token(src.shift(), TokenType.BinaryOperator));
-    } else if (src[0] === '=') {
+    } else if (src[0] == '=') {
       tokens.push(token(src.shift(), TokenType.Equals));
-    } else if (src[0] === ';') {
+    } else if (src[0] == ';') {
       tokens.push(token(src.shift(), TokenType.SemiColon))
     } else {
       // handle multi character tokens e.x >=, <=
@@ -72,16 +73,16 @@ export function tokenize(sourceCode: string): Token[] {
 
         // check for reserved keywords
         const reserved = RESERVED_KEYWORDS[ident]
-        if (reserved === undefined) {
+        if (reserved == undefined) {
           tokens.push(token(ident, TokenType.Identifier));
         } else {
           tokens.push(token(ident, reserved));
         }
       } else if (isSkippable(src[0])) {
-        src.shift(); // skip the character
+        src.shift(); // skip the current character
       } else {
-        console.log(`Unrecognized character found in source: ${src[0]}`);
-        Deno.exit();
+        console.log(`Unrecognized character found in source: ----> ${src[0]}`);
+        Deno.exit(1);
       }
     }
   }
