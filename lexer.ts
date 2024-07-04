@@ -7,6 +7,7 @@ export enum TokenType {
   SemiColon,
   BinaryOperator,
   Let,
+  EOF, // signified end of the file
 }
 
 const RESERVED_KEYWORDS: Record<string, TokenType> = {
@@ -39,7 +40,7 @@ function isSkippable(str: string) {
 
 export function tokenize(sourceCode: string): Token[] {
   const tokens = new Array<Token>();
-  const src = sourceCode.split('');
+  const src = sourceCode.split(''); // getting every single character
 
   // build each token
   while (src.length > 0) {
@@ -86,8 +87,11 @@ export function tokenize(sourceCode: string): Token[] {
       }
     }
   }
+
+  tokens.push({type: TokenType.EOF, value: 'EndOfFile'})
   return tokens
 }
+
 
 const source = await Deno.readTextFile('./test.txt');
 for (const token of tokenize(source)) {
