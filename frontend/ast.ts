@@ -1,5 +1,5 @@
 export type NodeType =
-  'Program'
+  | 'Program'
   | 'NumericLiteral'
   | 'Identifier'
   | 'BinaryExpression'
