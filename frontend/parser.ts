@@ -1,4 +1,12 @@
-import {BinaryExpression, Expression, Identifier, NumericLiteral, Program, Statement} from "./ast.ts";
+import {
+  BinaryExpression,
+  Expression,
+  Identifier,
+  NumericLiteral,
+  Program,
+  Statement,
+  VariableDeclaration
+} from "./ast.ts";
 import {Token, tokenize, TokenType} from "./lexer.ts";
 
 
@@ -45,8 +53,16 @@ export default class Parser {
   }
 
   private parse_statement(): Statement {
+    switch (this.at().type) {
+      case TokenType.Let:
+        return this.parse_var_declaration()
+      case TokenType.Const:
+        return this.parse_var_declaration()
+
+      default:
+        return this.parse_expression()
+    }
     // skip to parse expression
-    return this.parse_expression()
   }
 
   private parse_expression(): Expression {
@@ -116,5 +132,28 @@ export default class Parser {
         console.error(`Unexpected Token found during parsing!!`, this.at())
         Deno.exit(1)
     }
+  }
+
+  parse_var_declaration(): Statement {
+    const isConstant = this.eat().type == TokenType.Const;
+    const identifier = this.expect(TokenType.Identifier, 'Expected identifier name following let | const keywords').value;
+
+    if (this.at().type == TokenType.SemiColon) {
+      this.eat();
+      if (isConstant) {
+        throw 'Must assign a value to a constant expression. No value provided'
+      }
+      return {kind: 'VariableDeclaration', identifier, constant: false} as VariableDeclaration
+    }
+    this.expect(TokenType.Equals, 'Expected equals token following identifier in var declaration.')
+    const declaration = {
+      kind: 'VariableDeclaration',
+      value: this.parse_expression(),
+      identifier,
+      constant: isConstant
+    } as VariableDeclaration
+
+    this.expect(TokenType.SemiColon, 'Variable declaration must end with a semicolon')
+    return declaration
   }
 }

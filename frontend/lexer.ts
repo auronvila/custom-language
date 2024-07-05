@@ -8,11 +8,13 @@ export enum TokenType {
   SemiColon,
   BinaryOperator,
   Let,
+  Const,
   EOF, // signified end of the file
 }
 
 const RESERVED_KEYWORDS: Record<string, TokenType> = {
   'let': TokenType.Let,
+  'const': TokenType.Const,
 }
 
 export interface Token {
@@ -94,7 +96,7 @@ export function tokenize(sourceCode: string): Token[] {
 }
 
 
-const source = await Deno.readTextFile('./test.txt');
-for (const token of tokenize(source)) {
-  console.log(token)
-}
+// const source = await Deno.readTextFile('./test.txt');
+// for (const token of tokenize(source)) {
+//   console.log(token)
+// }

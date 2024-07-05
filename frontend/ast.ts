@@ -1,5 +1,6 @@
 export type NodeType =
   | 'Program'
+  | 'VariableDeclaration'
   | 'NumericLiteral'
   | 'Identifier'
   | 'BinaryExpression'
@@ -13,6 +14,13 @@ export interface Statement {
 export interface Program extends Statement {
   kind: 'Program';
   body: Statement[];
+}
+
+export interface VariableDeclaration extends Statement {
+  kind: 'VariableDeclaration';
+  constant: boolean,
+  identifier: string,
+  value?: Expression
 }
 
 // deno-lint-ignore no-empty-interface
