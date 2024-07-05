@@ -1,4 +1,4 @@
-import {BinaryExpression, Expression, Identifier, NullLiteral, NumericLiteral, Program, Statement} from "./ast.ts";
+import {BinaryExpression, Expression, Identifier, NumericLiteral, Program, Statement} from "./ast.ts";
 import {Token, tokenize, TokenType} from "./lexer.ts";
 
 
@@ -111,10 +111,6 @@ export default class Parser {
         const val = this.parse_expression()
         this.expect(TokenType.CloseParen, '') // eat the closing paren
         return val;
-      }
-      case TokenType.Null: {
-        this.eat();
-        return {kind: 'NullLiteral', value: 'null'} as NullLiteral
       }
       default :
         console.error(`Unexpected Token found during parsing!!`, this.at())

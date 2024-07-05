@@ -1,7 +1,7 @@
 export enum TokenType {
   Number,
   Identifier,
-  Null,
+  String,
   Equals,
   OpenParen,
   CloseParen,
@@ -13,7 +13,6 @@ export enum TokenType {
 
 const RESERVED_KEYWORDS: Record<string, TokenType> = {
   'let': TokenType.Let,
-  'null': TokenType.Null,
 }
 
 export interface Token {

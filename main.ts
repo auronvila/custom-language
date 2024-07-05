@@ -1,8 +1,15 @@
 import Parser from "./frontend/parser.ts";
 import {evaluate} from "./runtime/interpreter.ts";
+import Environment from "./runtime/environment.ts";
+import {MK_BOOL, MK_NULL, MK_NUMBER} from "./runtime/values.ts";
 
 function repl() {
   const parser = new Parser();
+  const env = new Environment();
+  env.declareVar('x', MK_NUMBER(100))
+  env.declareVar('true', MK_BOOL(true))
+  env.declareVar('false', MK_BOOL(false))
+  env.declareVar('null', MK_NULL())
   console.log('Repl v0.1')
   while (true) {
     const input = prompt('> ')
@@ -12,10 +19,12 @@ function repl() {
       Deno.exit(1)
     }
 
+    // tokenize every character
     const program = parser.produceAst(input);
     console.log(program);
 
-    const result = evaluate(program);
+    // interpret every token that is getting created
+    const result = evaluate(program, env);
     console.log(result)
   }
 }
