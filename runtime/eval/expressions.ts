@@ -1,5 +1,5 @@
 import {MK_NULL, NumberVal, RuntimeVal} from "../values.ts";
-import {BinaryExpression, Identifier} from "../../frontend/ast.ts";
+import {AssignmentExpression, BinaryExpression, Identifier} from "../../frontend/ast.ts";
 import Environment from "../environment.ts";
 import {evaluate} from "../interpreter.ts";
 
@@ -36,4 +36,13 @@ export function evaluate_binary_expr(binop: BinaryExpression, env: Environment):
 export function eval_identifier(ident: Identifier, env: Environment): RuntimeVal {
   const val = env.lookUpVar(ident.symbol);
   return val
+}
+
+export function eval_assignment(node: AssignmentExpression, env: Environment): RuntimeVal {
+  if (node.assigne.kind != 'Identifier') {
+    throw `Invalid assignment expression ${JSON.stringify(node.assigne)}`
+  }
+
+  const varname = (node.assigne as Identifier).symbol
+  return env.assignVar(varname, evaluate(node.value, env))
 }

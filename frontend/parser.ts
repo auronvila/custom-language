@@ -1,4 +1,5 @@
 import {
+  AssignmentExpression,
   BinaryExpression,
   Expression,
   Identifier,
@@ -66,7 +67,19 @@ export default class Parser {
   }
 
   private parse_expression(): Expression {
-    return this.parse_additive_expression()
+    return this.parse_assignment_expression()
+  }
+
+  parse_assignment_expression(): Expression {
+    const left = this.parse_additive_expression();
+
+    if (this.at().type == TokenType.Equals) {
+      this.eat();
+      const value = this.parse_assignment_expression();
+      return {value, assigne: left, kind: 'AssignmentExpression'} as AssignmentExpression
+    }
+
+    return left;
   }
 
   // Orders of Prescidence
