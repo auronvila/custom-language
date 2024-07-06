@@ -3,13 +3,13 @@ import {
   AssignmentExpression,
   BinaryExpression,
   Identifier,
-  NumericLiteral,
+  NumericLiteral, ObjectLiteral,
   Program,
   Statement,
   VariableDeclaration
 } from "../frontend/ast.ts";
 import Environment from "./environment.ts";
-import {eval_assignment, eval_identifier, evaluate_binary_expr} from "./eval/expressions.ts";
+import {eval_assignment, eval_identifier, eval_object_expr, evaluate_binary_expr} from "./eval/expressions.ts";
 import {evaluate_program, evaluate_var_declaration} from "./eval/statements.ts";
 
 
@@ -24,6 +24,8 @@ export function evaluate(astNode: Statement, env: Environment): RuntimeVal {
       return evaluate_binary_expr(astNode as BinaryExpression, env);
     case 'Identifier':
       return eval_identifier(astNode as Identifier, env)
+    case "ObjectLiteral":
+      return eval_object_expr(astNode as ObjectLiteral, env);
     case 'Program':
       return evaluate_program(astNode as Program, env)
     case 'AssignmentExpression':

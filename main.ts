@@ -1,15 +1,32 @@
 import Parser from "./frontend/parser.ts";
 import {evaluate} from "./runtime/interpreter.ts";
-import Environment from "./runtime/environment.ts";
-import {MK_BOOL, MK_NULL, MK_NUMBER} from "./runtime/values.ts";
+import Environment, {createGlobalEnv} from "./runtime/environment.ts";
+
+async function runFile() {
+  const parser = new Parser();
+  const env = createGlobalEnv();
+
+  console.log('Repl v0.1')
+  const input = await Deno.readTextFile('test.txt')
+
+  // check for no user input
+  if (!input || input.includes('exit')) {
+    Deno.exit(1)
+  }
+
+  // tokenize every character
+  const program = parser.produceAst(input);
+  console.log(program);
+
+  // interpret every token that is getting created
+  const result = evaluate(program, env);
+  console.log(result)
+}
 
 function repl() {
   const parser = new Parser();
-  const env = new Environment();
-  env.declareVar('x', MK_NUMBER(100), true)
-  env.declareVar('true', MK_BOOL(true), true)
-  env.declareVar('false', MK_BOOL(false), true)
-  env.declareVar('null', MK_NULL(), true)
+  const env = createGlobalEnv();
+
   console.log('Repl v0.1')
   while (true) {
     const input = prompt('> ')
@@ -29,4 +46,4 @@ function repl() {
   }
 }
 
-repl()
+runFile()
