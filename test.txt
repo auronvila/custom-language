@@ -1,10 +1,13 @@
-    const foo = 45;
+    let foo = 50 / 2;
 
     const obj = {
     x: 100,
     y: 32,
-    foo,
-        complex: {
-        var: true,
-        }
+    foo: foo,
+      complex: {
+        bar: true,
+      },
     };
+    let f = obj.complex.bar;
+    foo = obj.foo(bar(x,y)) + 5
+

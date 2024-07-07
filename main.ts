@@ -16,7 +16,7 @@ async function runFile() {
 
   // tokenize every character
   const program = parser.produceAst(input);
-  console.log(program);
+  // console.log(program);
 
   // interpret every token that is getting created
   const result = evaluate(program, env);

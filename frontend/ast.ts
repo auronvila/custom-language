@@ -7,6 +7,8 @@ export type NodeType =
   | 'BinaryExpression'
   | 'ObjectLiteral'
   | 'Property'
+  | 'MemberExpr'
+  | 'CallExpr'
 
 // statement will not return a value
 
@@ -41,6 +43,19 @@ export interface BinaryExpression extends Expression {
   left: Expression;
   right: Expression;
   operator: string;
+}
+
+export interface CallExpr extends Expression {
+  kind: 'CallExpr';
+  args: Expression[];
+  caller: Expression;
+}
+
+export interface MemberExpr extends Expression {
+  kind: 'MemberExpr';
+  object: Expression;
+  property: Expression;
+  computed: boolean;
 }
 
 export interface Identifier extends Expression {
